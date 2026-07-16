@@ -28,4 +28,4 @@ RUN npx tsc
 EXPOSE 5000
 
 # სერვერის გაშვება
-CMD ["node", "dist/server.js"]
+CMD ["node", "src/server.js"]
