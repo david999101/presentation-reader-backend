@@ -1,7 +1,7 @@
-# ვიყენებთ Node-ის ოფიციალურ გარემოს
-FROM node:20-slim
+# ვიყენებთ Node-ის სრულ ვერსიას (სადაც npx-იც არის და ყველაფერიც)
+FROM node:20
 
-# ვაინსტალირებთ LibreOffice-ს და ყველა საჭირო ბიბლიოთეკას
+# ვაინსტალირებთ LibreOffice-ს და ბიბლიოთეკებს
 RUN apt-get update && apt-get install -y \
     libreoffice \
     libxinerama1 \
@@ -21,12 +21,11 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 
-# კოპირდება მხოლოდ კოდის ფაილები და კონფიგურაცია
-# ამით თავიდან ვიცილებთ ლოკალური node_modules-ის კოპირებას და permissions-ის პრობლემას!
+# კოპირდება მხოლოდ საჭირო ფაილები
 COPY tsconfig.json ./
 COPY src ./src
 
 EXPOSE 5000
 
-# სერვერის პირდაპირ გაშვება TypeScript-ით (არანაირი tsc ბილდის შეცდომა!)
-CMD ["npx", "ts-node", "src/server.ts"]
+# პირდაპირი გაშვება ts-node-ით (npx-ის გარეშე)
+CMD ["node", "./node_modules/.bin/ts-node", "src/server.ts"]
