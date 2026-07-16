@@ -2,15 +2,7 @@ import express from "express";
 import cors from "cors";
 import uploadRouter from "./routes/upload.js";
 import { Communicate } from "edge-tts-universal";
-import fs from "fs";
-import path from "path";
 
-// სერვერის ჩართვისას ამოწმებს არსებობს თუ არა uploads საქაღალდე და თუ არა, ქმნის მას
-const uploadsDir = path.join(process.cwd(), "uploads");
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-    console.log("[Server] Uploads directory created successfully.");
-}
 
 const app = express();
 
