@@ -1,4 +1,4 @@
-# ვიყენებთ Node-ის სრულ ვერსიას, სადაც ყველაფერი ჩაშენებულია
+# ვიყენებთ Node-ის სტანდარტულ ვერსიას
 FROM node:20
 
 # ვაინსტალირებთ LibreOffice-ს და ბიბლიოთეკებს
@@ -14,18 +14,18 @@ RUN apt-get update && apt-get install -y \
     libxt6 \
     && rm -rf /var/lib/apt/lists/*
 
-# სამუშაო საქაღალდე
 WORKDIR /usr/src/app
 
-# პაკეტების კოპირება და ინსტალაცია
 COPY package*.json ./
 RUN npm install
 
-# კოპირდება მხოლოდ საჭირო ფაილები
-COPY tsconfig.json ./
-COPY src ./src
+# ვაკოპირებთ მთელ პროექტს
+COPY . .
+
+# ვუკეთებთ კომპილაციას JavaScript-ში (ეს შექმნის dist ფოლდერს კონტეინერში)
+RUN npm run build --if-present || npx tsc
 
 EXPOSE 5000
 
-# ვუშვებთ პირდაპირ ts-node-ით (npx-ის გარეშე)
-CMD ["node", "./node_modules/.bin/ts-node", "src/server.ts"]
+# ვუშვებთ დაკომპილირებულ ფაილს
+CMD ["node", "dist/server.js"]
