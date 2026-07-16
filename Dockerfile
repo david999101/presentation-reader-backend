@@ -23,7 +23,7 @@ RUN npm install
 
 # კოდის კოპირება და ბილდი
 COPY . .
-RUN npx tsc
+RUN ./node_modules/.bin/tsc
 
 EXPOSE 5000
 
