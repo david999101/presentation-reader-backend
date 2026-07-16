@@ -17,15 +17,16 @@ RUN apt-get update && apt-get install -y \
 # სამუშაო საქაღალდე
 WORKDIR /usr/src/app
 
-# პაკეტების ინსტალაცია
+# პაკეტების კოპირება და ინსტალაცია
 COPY package*.json ./
 RUN npm install
 
-# კოდის კოპირება და ბილდი
-COPY . .
-RUN ./node_modules/.bin/tsc
+# კოპირდება მხოლოდ კოდის ფაილები და კონფიგურაცია
+# ამით თავიდან ვიცილებთ ლოკალური node_modules-ის კოპირებას და permissions-ის პრობლემას!
+COPY tsconfig.json ./
+COPY src ./src
 
 EXPOSE 5000
 
-# სერვერის გაშვება
-CMD ["node", "src/server.js"]
+# სერვერის პირდაპირ გაშვება TypeScript-ით (არანაირი tsc ბილდის შეცდომა!)
+CMD ["npx", "ts-node", "src/server.ts"]
